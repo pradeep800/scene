@@ -44,8 +44,14 @@ const bakedTexture = textureLoader.load("baked.jpg");
  * material
  */
 const bakedMaterial = new THREE.MeshBasicMaterial({ map: bakedTexture });
-const pointMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
-const pointLightMaterial = new THREE.MeshBasicMaterial({ color: 0xffffe5 });
+const pointMaterial = new THREE.MeshBasicMaterial({
+  color: 0xffffff,
+  side: THREE.DoubleSide,
+});
+const pointLightMaterial = new THREE.MeshBasicMaterial({
+  color: 0xffffe5,
+  side: THREE.DoubleSide,
+});
 bakedTexture.flipY = false;
 
 /**
