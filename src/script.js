@@ -90,7 +90,6 @@ gltfLoader.load("portal.glb", (gltf) => {
   poleLightAMesh.material = pointLightMaterial;
   poleLightBMesh.material = pointLightMaterial;
   pointLight.material = pointMaterial;
-  console.log(poleLightAMesh, poleLightBMesh, pointLight);
 });
 /**
  * fireflies
@@ -169,9 +168,9 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   100
 );
-camera.position.x = 4;
+camera.position.x = 2;
 camera.position.y = 2;
-camera.position.z = 4;
+camera.position.z = -5;
 scene.add(camera);
 
 // Controls
