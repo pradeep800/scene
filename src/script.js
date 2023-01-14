@@ -6,6 +6,8 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import firefliesVertexShader from "./shaders/fireflies/vertex.glsl";
 import firefliesFragmentShader from "./shaders/fireflies/fragment.glsl";
+import portalVertexShader from "./shaders/portal/vertex.glsl";
+import portalFragmentShader from "./shaders/portal/fragment.glsl";
 /**
  * spector js
 
@@ -53,9 +55,13 @@ const bakedTexture = textureLoader.load("baked.jpg");
  * material
  */
 const bakedMaterial = new THREE.MeshBasicMaterial({ map: bakedTexture });
-const pointMaterial = new THREE.MeshBasicMaterial({
-  color: 0xffffff,
+const pointMaterial = new THREE.ShaderMaterial({
+  vertexShader: portalVertexShader,
+  fragmentShader: portalFragmentShader,
   side: THREE.DoubleSide,
+  uniforms: {
+    uTime: { value: 0 },
+  },
 });
 const pointLightMaterial = new THREE.MeshBasicMaterial({
   color: 0xffffe5,
@@ -197,6 +203,7 @@ const tick = () => {
   const elapsedTime = clock.getElapsedTime();
   //update material
   firefliesMaterial.uniforms.uTime.value = elapsedTime;
+  pointMaterial.uniforms.uTime.value = elapsedTime;
   // Update controls
   controls.update();
 
