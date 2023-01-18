@@ -57,7 +57,11 @@ const loadingBarElement = document.querySelector(".loading-bar");
 const manger = new THREE.LoadingManager(
   () => {
     gsap.delayedCall(0.5, () => {
-      gsap.to(overlayMaterial.uniforms.uAlpha, { duration: 3, value: 0 });
+      gsap.to(overlayMaterial.uniforms.uAlpha, {
+        duration: 3,
+        value: 0,
+        delay: 1,
+      });
       loadingBarElement.classList.add("ended");
       loadingBarElement.style.transform = "";
     });
