@@ -8,6 +8,7 @@ import firefliesVertexShader from "./shaders/fireflies/vertex.glsl";
 import firefliesFragmentShader from "./shaders/fireflies/fragment.glsl";
 import portalVertexShader from "./shaders/portal/vertex.glsl";
 import portalFragmentShader from "./shaders/portal/fragment.glsl";
+import { gsap } from "gsap";
 /**
  * spector js
 
@@ -29,19 +30,51 @@ const canvas = document.querySelector("canvas.webgl");
 
 // Scene
 const scene = new THREE.Scene();
-
+const overlayMaterial = new THREE.ShaderMaterial({
+  transparent: true,
+  uniforms: { uAlpha: { value: 1 } },
+  vertexShader: `
+ void main(){
+  gl_Position=vec4(position,1.0);
+ }
+ `,
+  fragmentShader: `
+ uniform float uAlpha;
+ void main(){
+  gl_FragColor=vec4(0.0,0.0,0.0,uAlpha);
+ }
+ `,
+});
+const overlayGeomatry = new THREE.PlaneGeometry(2, 2, 1, 1);
+const overlay = new THREE.Mesh(overlayGeomatry, overlayMaterial);
+scene.add(overlay);
 /**
  * Loaders
  */
 // Texture loader
-const textureLoader = new THREE.TextureLoader();
+const loadingBarElement = document.querySelector(".loading-bar");
+
+const manger = new THREE.LoadingManager(
+  () => {
+    gsap.delayedCall(0.5, () => {
+      gsap.to(overlayMaterial.uniforms.uAlpha, { duration: 3, value: 0 });
+      loadingBarElement.classList.add("ended");
+      loadingBarElement.style.transform = "";
+    });
+  },
+  (itemsUrl, itemsLoaded, itemsTotal) => {
+    let ratio = itemsLoaded / itemsTotal;
+    loadingBarElement.style.transform = `scaleX(${ratio})`;
+  }
+);
+const textureLoader = new THREE.TextureLoader(manger);
 
 // Draco loader
-const dracoLoader = new DRACOLoader();
+const dracoLoader = new DRACOLoader(manger);
 dracoLoader.setDecoderPath("draco/");
 
 // GLTF loader
-const gltfLoader = new GLTFLoader();
+const gltfLoader = new GLTFLoader(manger);
 gltfLoader.setDRACOLoader(dracoLoader);
 /**
  * Object
