@@ -45,8 +45,10 @@ const overlayMaterial = new THREE.ShaderMaterial({
  }
  `,
 });
+
 const overlayGeomatry = new THREE.PlaneGeometry(2, 2, 1, 1);
 const overlay = new THREE.Mesh(overlayGeomatry, overlayMaterial);
+
 scene.add(overlay);
 /**
  * Loaders
@@ -57,6 +59,9 @@ const loadingBarElement = document.querySelector(".loading-bar");
 const LoadingManager = new THREE.LoadingManager(
   () => {
     gsap.delayedCall(0.5, () => {
+      setTimeout(() => {
+        overlayMaterial.depthWrite = false;
+      }, 2000);
       gsap.to(overlayMaterial.uniforms.uAlpha, {
         duration: 3,
         value: 0,
