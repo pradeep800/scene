@@ -54,7 +54,7 @@ scene.add(overlay);
 // Texture loader
 const loadingBarElement = document.querySelector(".loading-bar");
 
-const manger = new THREE.LoadingManager(
+const LoadingManager = new THREE.LoadingManager(
   () => {
     gsap.delayedCall(0.5, () => {
       gsap.to(overlayMaterial.uniforms.uAlpha, {
@@ -71,14 +71,14 @@ const manger = new THREE.LoadingManager(
     loadingBarElement.style.transform = `scaleX(${ratio})`;
   }
 );
-const textureLoader = new THREE.TextureLoader(manger);
+const textureLoader = new THREE.TextureLoader(LoadingManager);
 
 // Draco loader
-const dracoLoader = new DRACOLoader(manger);
+const dracoLoader = new DRACOLoader(LoadingManager);
 dracoLoader.setDecoderPath("draco/");
 
 // GLTF loader
-const gltfLoader = new GLTFLoader(manger);
+const gltfLoader = new GLTFLoader(LoadingManager);
 gltfLoader.setDRACOLoader(dracoLoader);
 /**
  * Object
